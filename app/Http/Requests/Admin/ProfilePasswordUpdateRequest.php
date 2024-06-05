@@ -33,16 +33,16 @@ class ProfilePasswordUpdateRequest extends FormRequest
         ];
     }
 
-    public function withValidator($validator)
-    {
-        $messages = $validator->messages();
+    // public function withValidator($validator)
+    // {
+    //     $messages = $validator->messages();
 
-        foreach ($messages->all() as $message)
-        {
-            toastr()->error ( $message, 'Error');
-        }
+    //     foreach ($messages->all() as $message)
+    //     {
+    //         toastr()->error ( $message, 'Error');
+    //     }
 
-        return $validator->errors()->all();
+    //     return $validator->errors()->all();
 
-    }
+    // }
 }

@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/modules/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/assets/modules/fontawesome/css/all.min.css') }}">
 
+    <link rel="stylesheet" href="{{ asset('admin/assets/css/toastr.min.css') }}">
+
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('admin/assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/assets/css/components.css') }}">
@@ -59,9 +61,35 @@
 
     <script src="{{ asset('admin/assets/js/stisla.js') }}"></script>
 
+    <script src="{{ asset('admin/assets/js/toastr.min.js') }}"></script>
+
+    <script src="{{ asset('admin/assets/modules/upload-preview/assets/js/jquery.uploadPreview.min.js') }}"></script>
+
+
     <!-- Template JS File -->
     <script src="{{ asset('admin/assets/js/scripts.js') }}"></script>
     <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
+
+    <script>
+        toastr.options.progressBar = true;
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                // Display an info toast with no title
+                toastr.error("{{ $error }}")
+            @endforeach
+        @endif
+
+        $.uploadPreview({
+            input_field: "#image-upload", // Default: .image-upload
+            preview_box: "#image-preview", // Default: .image-preview
+            label_field: "#image-label", // Default: .image-label
+            label_default: "Choose File", // Default: Choose File
+            label_selected: "Change File", // Default: Change File
+            no_label: false, // Default: false
+            success_callback: null // Default: null
+        });
+    </script>
+    @stack('scripts')
 </body>
 
 </html>
