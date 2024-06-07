@@ -53,7 +53,7 @@
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header">Dashboard</li>
-            <li class=active><a class="nav-link" href="index-0.html"><i class="fas fa-fire"></i>General Dashboard</a>
+            <li class=active><a class="nav-link" href="{{ route('admin.dashboard') }}"><i class="fas fa-fire"></i>General Dashboard</a>
             </li>
 
             <li class="menu-header">Starter</li>
@@ -66,7 +66,7 @@
           </ul>
         </li> --}}
             {{-- <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Blank Page</span></a></li> --}}
+            <li><a class="nav-link" href="{{ route('admin.slider.index') }}"><i class="far fa-square"></i> <span>Slider</span></a></li>
         </ul>
-
     </aside>
 </div>
