@@ -4,7 +4,7 @@
     <!--=============================
             BANNER START
         ==============================-->
-    @include('frontend.home.components.sider')
+    @include('frontend.home.components.slider')
     <!--=============================
             BANNER END
         ==============================-->
@@ -25,7 +25,7 @@
 
         @include('frontend.home.components.offer-item')
     <!-- CART POPUT START -->
-    @include('frontend.home.components.cart-popup')
+    {{-- @include('frontend.home.components.cart-popup') --}}
 
     <!-- CART POPUT END -->
     <!--=============================
@@ -37,7 +37,7 @@
             MENU ITEM START
         ==============================-->
 
-    @include('frontend.home.components.menu-item')
+    {{-- @include('frontend.home.components.menu-item') --}}
     <!--=============================
             MENU ITEM END
         ==============================-->
@@ -46,7 +46,7 @@
     <!--=============================
             ADD SLIDER START
         ==============================-->
-        @include('frontend.home.components.add-slider')
+        {{-- @include('frontend.home.components.add-slider') --}}
 
     <!--=============================
             ADD SLIDER END
@@ -56,7 +56,7 @@
     <!--=============================
             TEAM START
         ==============================-->
-        @include('frontend.home.components.team')
+        {{-- @include('frontend.home.components.team') --}}
 
     <!--=============================
             TEAM END
@@ -66,7 +66,7 @@
     <!--=============================
             DOWNLOAD APP START
         ==============================-->
-        @include('frontend.home.components.app-download')
+        {{-- @include('frontend.home.components.app-download') --}}
 
     <!--=============================
             DOWNLOAD APP END
@@ -76,7 +76,7 @@
     <!--=============================
            TESTIMONIAL  START
         ==============================-->
-        @include('frontend.home.components.testimonial')
+        {{-- @include('frontend.home.components.testimonial') --}}
 
     <!--=============================
             TESTIMONIAL END
@@ -86,7 +86,7 @@
     <!--=============================
             COUNTER START
         ==============================-->
-        @include('frontend.home.components.counter')
+        {{-- @include('frontend.home.components.counter') --}}
 
 
     <!--=============================
@@ -97,7 +97,7 @@
     <!--=============================
             BLOG 2 START
         ==============================-->
-        @include('frontend.home.components.blog')
+        {{-- @include('frontend.home.components.blog') --}}
 
 
     <!--=============================
