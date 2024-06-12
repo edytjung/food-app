@@ -42,8 +42,15 @@
                             <i class="far fa-star"></i>
                             <span>10</span>
                         </p>
-                        <a class="title" href="menu_details.html">{{ $product->name }}</a>
-                        <h5 class="price">$ {{ $product->price }}</h5>
+                        <a class="title" href="{{ route('product.show', $product->slug)}}">{{ $product->name }}</a>
+                        <h5 class="price">
+                            @if ($product->offer_price > 0)
+                            $ {{ $product->offer_price }}
+                            <del>$ {{ $product->price }}</del>
+                            @else
+                                $ {{ $product->price }}
+                            @endif
+                        </h5>
                         <ul class="d-flex flex-wrap justify-content-center">
                             <li><a href="#" data-bs-toggle="modal" data-bs-target="#cartModal"><i
                                         class="fas fa-shopping-basket"></i></a></li>

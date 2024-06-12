@@ -21,7 +21,7 @@ class FrontendController extends Controller
         $wcus = WhyChooseUs::where('status', 1)->get();
 
         $categories = Category::where('status', 1)->where('show_at_home',1)->get();
-        $products = Product::where('status', 1)->where('show_at_home',1)->get();
+        $products = Product::where('status', 1)->where('show_at_home',1)->orderBy('id', 'desc')->take(8)->get();
 
         return view('frontend.home.index', compact('sliders', 'sectionTitles', 'wcus', 'categories', 'products'));
     }
@@ -34,5 +34,12 @@ class FrontendController extends Controller
         ];
 
         return SectionTable::whereIn('key', $keys)->pluck('value','key');
+    }
+
+    function showProduct(string $slug): View {
+        
+        $product = Product::where('slug', $slug)->first();
+
+        return view('frontend.pages.product-view', compact('product'));
     }
 }
