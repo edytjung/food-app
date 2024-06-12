@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Product;
 use App\DataTables\ProductDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ProductCreateRequest;
+use App\Http\Requests\Admin\ProductUpdateRequest;
 use App\Models\Admin\Product\Category;
 use App\Models\Admin\Product\Product;
 use App\Traits\FileUploadTrait;
@@ -75,15 +76,40 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $categories = Category::where('status',1)->get();
+
+        return view('admin.product.edit', compact('product', 'categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductUpdateRequest $request, string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+
+        // Handle Image Upload
+        $imagePath = $this->uploadImage($request, 'thumb_image', $product->thumb_image);
+
+        $product->thumb_image = !empty($imagePath) ? $imagePath : $product->thumb_image;
+        $product->name = $request->name;
+        $product->slug = generateUniqueSlug("Admin\\Product\\Product",$request->name);
+        $product->category_id = $request->category_id;
+        $product->short_description = $request->short_description;
+        $product->long_description = $request->long_description;
+        $product->price = $request->price;
+        $product->offer_price = $request->offer_price;
+        $product->sku = $request->sku;
+        $product->seo_title = $request->seo_title;
+        $product->seo_description = $request->seo_description;
+        $product->show_at_home = $request->show_at_home;
+        $product->status = $request->status;
+        $product->save();
+
+        toastr()->success('Updated Successfully');
+
+        return to_route('admin.product.index');
     }
 
     /**
@@ -91,6 +117,13 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try{
+            $product = Product::findOrFail($id);
+            $this->removeImage($product->thumb_image);
+            $product->delete();
+            return response(['status' => 'success', 'message' => 'Deleted Successfully']);
+        }catch( \Exception $e){
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
+        }
     }
 }

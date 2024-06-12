@@ -23,12 +23,26 @@ class ProductDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
                 ->addColumn('action', function($query){
-                    $edit = "<a href='". route('admin.category.edit', $query->id)."' class='btn btn-primary'><i class='fas fa-edit'></i></a>";
-                    $delete = "<a href='". route('admin.category.destroy', $query->id)."' class='delete-item btn btn-danger'><i class='fas fa-minus-circle'></i></a>";
+                    $edit = "<a href='". route('admin.product.edit', $query->id)."' class='btn btn-primary'><i class='fas fa-edit'></i></a>";
+                    $delete = "<a href='". route('admin.product.destroy', $query->id)."' class='delete-item btn btn-danger'><i class='fas fa-minus-circle'></i></a>";
+                    $more = '
+                    <div class="btn-group dropleft">
+                      <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fas fa-cog"></i>
+                      </button>
+                      <div class="dropdown-menu dropleft" x-placement="left-start" style="position: absolute; transform: translate3d(-202px, 0px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a class="dropdown-item" href="'.route('admin.product-gallery.show-index', $query->id).'">Product Gallery</a>
+                        <a class="dropdown-item" href="'.route('admin.product-size.show-index', $query->id).'">Product Size</a>
+                      </div>
+                    </div>
+                    ';
 
-                    return $edit." ".$delete;
+                    return $edit." ".$delete." ".$more;
                 })
-                ->addColumn('Show at Home', function($query){
+                ->addColumn('image', function($query){
+                    return '<img width="100px" src="'.asset($query->thumb_image).'" />';
+                })
+                ->addColumn('Show', function($query){
                     if(($query->show_at_home) === 1){
                         return '<span class="badge badge-primary">Yes</span>';
                     }else{
@@ -42,7 +56,13 @@ class ProductDataTable extends DataTable
                         return '<span class="badge badge-danger btn-sm">Inactive</span>';
                     }
                 })
-                ->rawColumns(['action','Show at Home','status'])
+                ->addColumn('price', function($query){
+                    return '$ '.$query->price;
+                })
+                ->addColumn('offer_price', function($query){
+                    return '$ '.$query->offer_price;
+                })
+                ->rawColumns(['action', 'image', 'Show','status'])
                 ->setRowId('id');
     }
 
@@ -83,13 +103,16 @@ class ProductDataTable extends DataTable
     {
         return [
             Column::make('id'),
+            Column::computed('image'),
             Column::make('name'),
-            Column::computed('Show at Home'),
-            Column::computed('status'),
+            Column::make('price'),
+            Column::make('offer_price'),
+            Column::computed('Show')->width(50),
+            Column::computed('status')->width(50),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
-                  ->width(150)
+                  ->width(200)
                   ->addClass('text-center'),
         ];
     }

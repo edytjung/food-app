@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\Product\Category;
+use App\Models\Admin\Product\Product;
 use App\Models\SectionTable;
 use App\Models\Slider;
 use App\Models\WhyChooseUs;
@@ -17,7 +19,11 @@ class FrontendController extends Controller
 
         $sectionTitles = $this->getSectionTitle();
         $wcus = WhyChooseUs::where('status', 1)->get();
-        return view('frontend.home.index', compact('sliders', 'sectionTitles', 'wcus'));
+
+        $categories = Category::where('status', 1)->where('show_at_home',1)->get();
+        $products = Product::where('status', 1)->where('show_at_home',1)->get();
+
+        return view('frontend.home.index', compact('sliders', 'sectionTitles', 'wcus', 'categories', 'products'));
     }
 
     function getSectionTitle() : Collection {

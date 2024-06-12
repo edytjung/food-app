@@ -28,6 +28,6 @@ class DatabaseSeeder extends Seeder
         Slider::factory(10)->create();
         WhyChooseUs::factory(3)->create();
         $this->call(ProductCategorySeeder::class);
-        Product::factory(100)->create();
+        Product::factory(10)->create();
     }
 }
