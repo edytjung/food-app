@@ -2,105 +2,105 @@
 
 @section('content')
     <!--=============================
-            BANNER START
-        ==============================-->
+                BANNER START
+            ==============================-->
     @include('frontend.home.components.slider')
     <!--=============================
-            BANNER END
-        ==============================-->
+                BANNER END
+            ==============================-->
 
 
     <!--=============================
-            WHY CHOOSE START
-        ==============================-->
-@include('frontend.home.components.why-choose')
+                WHY CHOOSE START
+            ==============================-->
+    @include('frontend.home.components.why-choose')
     <!--=============================
-            WHY CHOOSE END
-        ==============================-->
+                WHY CHOOSE END
+            ==============================-->
 
 
     <!--=============================
-            OFFER ITEM START
-        ==============================-->
-
-        @include('frontend.home.components.offer-item')
+                OFFER ITEM START
+            ==============================-->
+    @include('frontend.home.components.offer-item')
+    
     <!-- CART POPUT START -->
-    {{-- @include('frontend.home.components.cart-popup') --}}
+    @include('frontend.home.components.cart-popup')
 
     <!-- CART POPUT END -->
     <!--=============================
-            OFFER ITEM END
-        ==============================-->
+                OFFER ITEM END
+            ==============================-->
 
 
     <!--=============================
-            MENU ITEM START
-        ==============================-->
+                MENU ITEM START
+            ==============================-->
 
     @include('frontend.home.components.menu-item')
     <!--=============================
-            MENU ITEM END
-        ==============================-->
+                MENU ITEM END
+            ==============================-->
 
 
     <!--=============================
-            ADD SLIDER START
-        ==============================-->
-        {{-- @include('frontend.home.components.add-slider') --}}
+                ADD SLIDER START
+            ==============================-->
+    {{-- @include('frontend.home.components.add-slider') --}}
 
     <!--=============================
-            ADD SLIDER END
-        ==============================-->
-
-
-    <!--=============================
-            TEAM START
-        ==============================-->
-        {{-- @include('frontend.home.components.team') --}}
-
-    <!--=============================
-            TEAM END
-        ==============================-->
+                ADD SLIDER END
+            ==============================-->
 
 
     <!--=============================
-            DOWNLOAD APP START
-        ==============================-->
-        {{-- @include('frontend.home.components.app-download') --}}
+                TEAM START
+            ==============================-->
+    {{-- @include('frontend.home.components.team') --}}
 
     <!--=============================
-            DOWNLOAD APP END
-        ==============================-->
-
-
-    <!--=============================
-           TESTIMONIAL  START
-        ==============================-->
-        {{-- @include('frontend.home.components.testimonial') --}}
-
-    <!--=============================
-            TESTIMONIAL END
-        ==============================-->
+                TEAM END
+            ==============================-->
 
 
     <!--=============================
-            COUNTER START
-        ==============================-->
-        {{-- @include('frontend.home.components.counter') --}}
+                DOWNLOAD APP START
+            ==============================-->
+    {{-- @include('frontend.home.components.app-download') --}}
+
+    <!--=============================
+                DOWNLOAD APP END
+            ==============================-->
 
 
     <!--=============================
-            COUNTER END
-        ==============================-->
+               TESTIMONIAL  START
+            ==============================-->
+    {{-- @include('frontend.home.components.testimonial') --}}
+
+    <!--=============================
+                TESTIMONIAL END
+            ==============================-->
 
 
     <!--=============================
-            BLOG 2 START
-        ==============================-->
-        {{-- @include('frontend.home.components.blog') --}}
+                COUNTER START
+            ==============================-->
+    {{-- @include('frontend.home.components.counter') --}}
 
 
     <!--=============================
-            BLOG 2 END
-        ==============================-->
+                COUNTER END
+            ==============================-->
+
+
+    <!--=============================
+                BLOG 2 START
+            ==============================-->
+    {{-- @include('frontend.home.components.blog') --}}
+
+
+    <!--=============================
+                BLOG 2 END
+            ==============================-->
 @endsection

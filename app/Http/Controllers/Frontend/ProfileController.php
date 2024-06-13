@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\ProfilePasswordUpdateRequest;
 use App\Http\Requests\Frontend\ProfileUpdateRequest;
+use App\Models\Admin\Product\Product;
 use App\Traits\FileUploadTrait;
 use Auth;
 use Illuminate\Http\RedirectResponse;
@@ -46,5 +47,10 @@ class ProfileController extends Controller
         $user->avatar = isset($imagePath) ? $imagePath : $user->avatar;
         $user->save();
         return response(['status'=>'success', 'message'=>'Avatar Updated Successfully']);
+    }
+
+    function loadProductModal($productId) {
+        $product = Product::with(['productSizes','productOptions'])->findOrFail($productId);
+        return view('frontend.layouts.ajax-files.product-popup-modal', compact('product'))->render();
     }
 }

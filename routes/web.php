@@ -46,3 +46,6 @@ Route::group(['middleware'=>'guest'], function(){
 require __DIR__.'/auth.php';
 // show product detail 
 Route::get('/product/{slug}', [FrontendController::class, 'showProduct'])->name('product.show');
+
+// Product Modal Route
+Route::get('/load-product-modal/{productId}', [FrontendProfileController::class,'loadProductModal'])->name('load-product-modal');

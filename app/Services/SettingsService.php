@@ -9,7 +9,10 @@ class SettingsService
 {
     function getSettings(){
         return Cache::rememberForever('settings', function(){
-            return Setting::pluck('value', 'key')->toArray();;
+            if(class_exists(Setting::class))
+            {
+                return Setting::pluck('value', 'key')->toArray();;
+            }
         });
     }
 

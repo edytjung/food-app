@@ -136,7 +136,9 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
     </script>
+    @include('frontend.layouts.global-scripts')
     @stack('scripts')
 </body>
 

@@ -1,4 +1,4 @@
-<section class="fp__menu mt_95 xs_mt_65">
+<section class="fp__menu mt_95 xs_mt_65 mb-5">
     <div class="container">
         <div class="row wow fadeInUp" data-wow-duration="1s">
             <div class="col-md-8 col-lg-7 col-xl-6 m-auto text-center">
@@ -52,8 +52,11 @@
                             @endif
                         </h5>
                         <ul class="d-flex flex-wrap justify-content-center">
-                            <li><a href="#" data-bs-toggle="modal" data-bs-target="#cartModal"><i
-                                        class="fas fa-shopping-basket"></i></a></li>
+                            <li>
+                                <a href="javascript:;" onclick="loadProductModal('{{ $product->id}}')" data-bs-toggle="modal" data-bs-target="#cartModal">
+                                    <i class="fas fa-shopping-basket"></i>
+                                </a>
+                            </li>
                             <li><a href="#"><i class="fal fa-heart"></i></a></li>
                             <li><a href="#"><i class="far fa-eye"></i></a></li>
                         </ul>
