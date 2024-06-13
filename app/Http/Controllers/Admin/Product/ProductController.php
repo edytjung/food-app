@@ -94,7 +94,7 @@ class ProductController extends Controller
 
         $product->thumb_image = !empty($imagePath) ? $imagePath : $product->thumb_image;
         $product->name = $request->name;
-        $product->slug = generateUniqueSlug("Admin\\Product\\Product",$request->name);
+        // $product->slug = generateUniqueSlug("Admin\\Product\\Product",$request->name);
         $product->category_id = $request->category_id;
         $product->short_description = $request->short_description;
         $product->long_description = $request->long_description;

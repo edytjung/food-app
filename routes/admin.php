@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Product\ProductGalleryContoller;
 use App\Http\Controllers\Admin\Product\ProductOptionController;
 use App\Http\Controllers\Admin\Product\ProductSizeController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\WhyChooseUsController;
 use Illuminate\Support\Facades\Route;
@@ -40,5 +41,9 @@ Route::group(['prefix'=> 'admin', 'as'=>'admin.'], function(){
     Route::resource('product-size', ProductSizeController::class);
 
     Route::resource('product-option', ProductOptionController::class);
+
+    // Setting Route
+    Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+    Route::put('/general-setting', [SettingController::class, 'updateGeneralSetting'])->name('setting.generalUpdate');
 
 });
