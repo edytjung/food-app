@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\DashboardController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Frontend\ProfileController as FrontendProfileController;
@@ -44,8 +45,10 @@ Route::group(['middleware'=>'guest'], function(){
 });
 
 require __DIR__.'/auth.php';
-// show product detail 
+// show product detail
 Route::get('/product/{slug}', [FrontendController::class, 'showProduct'])->name('product.show');
 
 // Product Modal Route
 Route::get('/load-product-modal/{productId}', [FrontendProfileController::class,'loadProductModal'])->name('load-product-modal');
+
+Route::post('add-to-cart', [CartController::class,'addToCart'])->name('add-to-cart');
