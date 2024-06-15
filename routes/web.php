@@ -52,3 +52,4 @@ Route::get('/product/{slug}', [FrontendController::class, 'showProduct'])->name(
 Route::get('/load-product-modal/{productId}', [FrontendProfileController::class,'loadProductModal'])->name('load-product-modal');
 
 Route::post('add-to-cart', [CartController::class,'addToCart'])->name('add-to-cart');
+Route::get('get-cart-product', [CartController::class,'getCartProduct'])->name('get-cart-products');

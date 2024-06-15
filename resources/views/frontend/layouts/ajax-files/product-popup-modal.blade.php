@@ -79,7 +79,7 @@
         </div>
     </div>
     <ul class="details_button_area d-flex flex-wrap">
-        <li><button type="submit" class="common_btn">add to cart</button></li>
+        <li><button type="submit" class="common_btn modal_cart_button">add to cart</button></li>
     </ul>
 </div>
 </form>
@@ -141,6 +141,16 @@
 
         $("#model_add_to_cart_form").on('submit', function(e){
             e.preventDefault();
+            // validation
+            let selectedSize = $("input[name='product_size']");
+            if(selectedSize.length > 0){
+                if($("input[name='product_size']:checked").val() === undefined){
+                    toastr.error('Please select a size');
+                    console.error('Please select a size');
+                    return;
+                }
+            }
+
             let formData = $(this).serialize();
             // console.log(formData);
             $.ajax({
@@ -148,12 +158,23 @@
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')},
                 url: '{{ route("add-to-cart") }}',
                 data: formData,
+                beforeSend: function(){
+                    $('.modal_cart_button').attr('disabled', true);
+                    $('.modal_cart_button').html('<span class="spinner-border text-light spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+                },
                 success: function(response){
-
+                    toastr.success(response.message);
+                    $('#cartModal').modal('hide');
+                    updateSidebarCart();
                 },
                 error: function(xhr, status, error){
-                    console.error(error)
+                    let errorMessage = xhr.responseJSON.message;
+                    toastr.error(errorMessage);
                 },
+                complete: function(){
+                    $('.modal_cart_button').attr('disabled', false);
+                    $('.modal_cart_button').html('Add To Cart');
+                }
             })
         });
     }); // end of document ready
