@@ -6,10 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\Product\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class CartController extends Controller
 {
+    function index(): View {
+        return view('frontend.pages.cart-view');
+    }
     function addToCart(Request $request){
         try{
             $product = Product::with(['productSizes', 'productOptions'])->findOrFail($request->product_id);
@@ -70,5 +74,34 @@ class CartController extends Controller
         // Cart::destroy();
         return view('frontend.layouts.ajax-files.sidebar-cart-item')->render();
 
+    }
+    function cartProductRemove($rowId) {
+        try{
+            Cart::remove($rowId);
+            // return view('frontend.layouts.ajax-files.sidebar-cart-item')->render();
+            return response(['status' => 'success', 'message' => 'item has been removed!'], 200);
+        }catch(\Exception $e){
+            return response(['status' => 'error', 'message' => 'Sorry something wrong'], 500);
+        }
+
+    }
+
+    function cartQtyUpdate(Request $request) : Response {
+        try{
+            Cart::update($request->rowId, $request->qty);
+
+            return response([
+                'status' => 'success',
+                'message' => 'Updated Cart Successfully'
+            ], 200);
+
+        }catch(\Exception $e){
+            logger($e);
+
+            return response([
+                'status' => 'error',
+                'message' => 'Something went wrong'
+            ], 500);
+        }
     }
 }

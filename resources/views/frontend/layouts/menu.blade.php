@@ -100,7 +100,7 @@
                     @endforeach
                     <p class="price">{{ currencyPosition($cartProduct->price) }}</p>
                 </div>
-                <span class="del_icon"><i class="fal fa-times"></i></span>
+                <span class="del_icon" onclick="removeProductFromSidebar('{{ $cartProduct->rowId }}')"><i class="fal fa-times"></i></span>
             </li>
             @endforeach
             {{-- <li>
@@ -118,7 +118,7 @@
             </li> --}}
         </ul>
         <p class="subtotal">sub total <span class="cart_subtotal">{{ currencyPosition(cartTotal()) }}</span></p>
-        <a class="cart_view" href="cart_view.html"> view cart</a>
+        <a class="cart_view" href="{{ route('cart.index') }}"> view cart</a>
         <a class="checkout" href="check_out.html">checkout</a>
     </div>
 </div>

@@ -1,8 +1,8 @@
 @extends('frontend.layouts.master')
 @section('content')
     <!--=============================
-            BREADCRUMB START
-        ==============================-->
+                                    BREADCRUMB START
+                                ==============================-->
     <section class="fp__breadcrumb" style="background: url({{ asset('frontend/images/counter_bg.jpg') }});">
         <div class="fp__breadcrumb_overlay">
             <div class="container">
@@ -17,11 +17,11 @@
         </div>
     </section>
     <!--=============================
-            BREADCRUMB END
-        ==============================-->
+                                    BREADCRUMB END
+                                ==============================-->
     <!--=============================
-                MENU DETAILS START
-            ==============================-->
+                                        MENU DETAILS START
+                                    ==============================-->
     <section class="fp__menu_details mt_115 xs_mt_85 mb_95 xs_mb_65">
         <div class="container">
             <div class="row">
@@ -29,9 +29,11 @@
                     <div class="exzoom hidden" id="exzoom">
                         <div class="exzoom_img_box fp__menu_details_images">
                             <ul class='exzoom_img_ul'>
-                                <li><img class="zoom ing-fluid w-100" src="{{ asset($product->thumb_image) }}" alt="product"></li>
+                                <li><img class="zoom ing-fluid w-100" src="{{ asset($product->thumb_image) }}"
+                                        alt="product"></li>
                                 @foreach ($product->galleries as $gallery)
-                                <li><img class="zoom ing-fluid w-100" src="{{ asset($gallery->image) }}" alt="product"></li>
+                                    <li><img class="zoom ing-fluid w-100" src="{{ asset($gallery->image) }}" alt="product">
+                                    </li>
                                 @endforeach
                             </ul>
                         </div>
@@ -63,50 +65,72 @@
                                 {{ currencyPosition($product->price) }}
                             @endif
                         </h3>
-                        <p class="short_description">
-                            {{ $product->short_description }}
-                        </p>
-                        @if($product->productSizes->count())
-                        <div class="details_size">
-                            <h5>select size</h5>
-                            @foreach ($product->productSizes as $productSize)
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="size-{{ $productSize->id }}"
-                                    >
-                                <label class="form-check-label" for="size-{{ $productSize->id }}">
-                                    {{ $productSize->name }} <span>+ {{ currencyPosition($productSize->price) }}</span>
-                                </label>
-                            </div>
-                            @endforeach
-                        </div>
-                        @endif
-                        @if($product->productOptions->count())
-                            <div class="details_extra_item">
-                                <h5>select option <span>(optional)</span></h5>
-                                @foreach ($product->productOptions as $productOption)
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="option-{{ $productOption->id }}">
-                                    <label class="form-check-label" for="option-{{ $productOption->id }}">
-                                        {{ $productOption->name }} <span>+ {{ currencyPosition($productOption->price) }}</span>
-                                    </label>
+                        <p class="short_description">{{ $product->short_description }}</p>
+                        <form action="" id="v_add_to_cart_form">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            @if ($product->offer_price > 0)
+                                <input type="hidden" name="base_price" class="v_base_price"
+                                    value="{{ $product->offer_price }}" />
+                            @else
+                                <input type="hidden" name="base_price" class="v_base_price"
+                                    value="{{ $product->price }}" />
+                            @endif
+                            @if ($product->productSizes->count())
+                                <div class="details_size">
+                                    <h5>select size</h5>
+                                    @foreach ($product->productSizes as $productSize)
+                                        <div class="form-check">
+                                            <input class="form-check-input v_product_size" type="radio"
+                                                value="{{ $productSize->id }}" data-price="{{ $productSize->price }}"
+                                                name="product_size" id="size-{{ $productSize->id }}">
+                                            <label class="form-check-label" for="size-{{ $productSize->id }}">
+                                                {{ $productSize->name }} <span>+
+                                                    {{ currencyPosition($productSize->price) }}</span>
+                                            </label>
+                                        </div>
+                                    @endforeach
                                 </div>
-                                @endforeach
-                            </div>
-                        @endif
+                            @endif
 
-                        <div class="details_quentity">
-                            <h5>select quentity</h5>
-                            <div class="quentity_btn_area d-flex flex-wrapa align-items-center">
-                                <div class="quentity_btn">
-                                    <button class="btn btn-danger"><i class="fal fa-minus"></i></button>
-                                    <input type="text" placeholder="1">
-                                    <button class="btn btn-success"><i class="fal fa-plus"></i></button>
+                            @if ($product->productOptions->count())
+                                <div class="details_extra_item">
+                                    <h5>select option <span>(optional)</span></h5>
+                                    @foreach ($product->productOptions as $productOption)
+                                        <div class="form-check">
+                                            <input class="form-check-input v_product_option" type="checkbox"
+                                                value="{{ $productOption->id }}" data-price="{{ $productOption->price }}"
+                                                id="option-{{ $productOption->id }}" name="product_option[]">
+                                            <label class="form-check-label" for="option-{{ $productOption->id }}">
+                                                {{ $productOption->name }} <span>+
+                                                    {{ currencyPosition($productOption->price) }}</span>
+                                            </label>
+                                        </div>
+                                    @endforeach
                                 </div>
-                                <h3>$320.00</h3>
+                            @endif
+
+                            <div class="details_quentity">
+                                <h5>select quantity</h5>
+                                <div class="quentity_btn_area d-flex flex-wrapa align-items-center">
+                                    <div class="quentity_btn">
+                                        <button class="btn btn-danger v_decrement"><i class="fal fa-minus"></i></button>
+                                        <input type="text" placeholder="1" id="v_quantity" name="quantity"
+                                            value="1">
+                                        <button class="btn btn-success v_increment"><i class="fal fa-plus"></i></button>
+                                    </div>
+                                    <h3 id="v_total_price">
+                                        @if ($product->offer_price > 0)
+                                            {{ currencyPosition($product->offer_price) }}
+                                        @else
+                                            {{ currencyPosition($product->price) }}
+                                        @endif
+                                    </h3>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                         <ul class="details_button_area d-flex flex-wrap">
-                            <li><a class="common_btn" href="#">add to cart</a></li>
+                            <li><a class="common_btn modal_cart_button v_submit_button" id="v_submit_button" href="#">add to cart</a></li>
                             <li><a class="wishlist" href="#"><i class="far fa-heart"></i></a></li>
                         </ul>
                     </div>
@@ -250,43 +274,49 @@
                     </div>
                 </div>
             </div>
+            {{-- relation product --}}
             <div class="fp__related_menu mt_90 xs_mt_60">
                 <h2>related item</h2>
                 <div class="row related_product_slider">
                     @forelse ($relatedProducts as $relatedProduct)
-                    <div class="col-xl-3 wow fadeInUp" data-wow-duration="1s">
-                        <div class="fp__menu_item">
-                            <div class="fp__menu_item_img">
-                                <img src="{{ asset($relatedProduct->thumb_image) }}" alt="{{ $relatedProduct->name }}" class="img-fluid w-100">
-                                <a class="category" href="#">{{ $relatedProduct->category->name }}</a>
-                            </div>
-                            <div class="fp__menu_item_text">
-                                <p class="rating">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                    <i class="far fa-star"></i>
-                                    <span>74</span>
-                                </p>
-                                <a class="title" href="{{ route('product.show', $relatedProduct->slug)}}">{{ $relatedProduct->name }}</a>
-                                <h5 class="price">
-                                    @if ($product->offer_price > 0)
-                                        {{ currencyPosition($product->offer_price) }}
-                                        <del>{{ currencyPosition($product->price) }}</del>
-                                    @else
-                                        {{ currencyPosition($product->price) }}
-                                    @endif
-                                </h5>
-                                <ul class="d-flex flex-wrap justify-content-center">
-                                    <li><a href="#" data-bs-toggle="modal" data-bs-target="#cartModal"><i
-                                                class="fas fa-shopping-basket"></i></a></li>
-                                    <li><a href="#"><i class="fal fa-heart"></i></a></li>
-                                    <li><a href="#"><i class="far fa-eye"></i></a></li>
-                                </ul>
+                        <div class="col-xl-3 wow fadeInUp" data-wow-duration="1s">
+                            <div class="fp__menu_item">
+                                <div class="fp__menu_item_img">
+                                    <img src="{{ asset($relatedProduct->thumb_image) }}"
+                                        alt="{{ $relatedProduct->name }}" class="img-fluid w-100">
+                                    <a class="category" href="#">{{ $relatedProduct->category->name }}</a>
+                                </div>
+                                <div class="fp__menu_item_text">
+                                    <p class="rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                        <i class="far fa-star"></i>
+                                        <span>74</span>
+                                    </p>
+                                    <a class="title"
+                                        href="{{ route('product.show', $relatedProduct->slug) }}">{{ $relatedProduct->name }}</a>
+                                    <h5 class="price">
+                                        @if ($product->offer_price > 0)
+                                            {{ currencyPosition($relatedProduct->offer_price) }}
+                                            <del>{{ currencyPosition($relatedProduct->price) }}</del>
+                                        @else
+                                            {{ currencyPosition($relatedProduct->price) }}
+                                        @endif
+                                    </h5>
+                                    <ul class="d-flex flex-wrap justify-content-center">
+                                        <li><a href="javascript:;" onclick="loadProductModal('{{ $relatedProduct->id}}')" data-bs-toggle="modal" data-bs-target="#cartModal"><i
+                                                    class="fas fa-shopping-basket"></i></a></li>
+                                        <li><a href="#"><i class="fal fa-heart"></i></a></li>
+                                        <li>
+                                            <a href="{{ route('product.show', $relatedProduct->slug) }}">
+                                                <i class="far fa-eye"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     @empty
                     @endforelse
                 </div>
@@ -294,3 +324,111 @@
         </div>
     </section>
 @endsection
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('.v_product_size').prop('checked', false);
+            $('.v_product_option').prop('checked', false);
+
+            $('.v_product_size').on('change', function() {
+                v_updateTotalPrice();
+            });
+
+            $('.v_product_option').on('change', function() {
+                v_updateTotalPrice();
+            });
+
+            $('.v_increment').on('click', function(e) {
+                let quantity = $('#v_quantity');
+                let currentQuantity = parseFloat(quantity.val());
+                e.preventDefault();
+                quantity.val(++currentQuantity);
+                v_updateTotalPrice();
+            });
+
+            $('.v_decrement').on('click', function(e) {
+
+                let quantity = $('#v_quantity');
+                let currentQuantity = parseFloat(quantity.val());
+                e.preventDefault();
+                if (currentQuantity > 1) {
+                    quantity.val(--currentQuantity);
+                }
+                v_updateTotalPrice();
+            });
+
+            // Function Update Total Price base on selected options
+            function v_updateTotalPrice() {
+                let basePrice = parseFloat($('.v_base_price').val());
+                let selectedSizePrice = 0;
+                let selectedOptionsPrice = 0;
+
+                let quantity = $('#v_quantity');
+                let currentQuantity = parseFloat(quantity.val());
+
+                // calculate Product Size Price
+                let selectedSize = $('.v_product_size:checked');
+                if (selectedSize.length > 0) {
+                    selectedSizePrice = parseFloat(selectedSize.data("price"));
+                }
+
+                // calculate Product Option Price
+                let selectedOption = $('.v_product_option:checked');
+                $(selectedOption).each(function() {
+                    selectedOptionsPrice += parseFloat($(this).data("price"));
+                });
+
+                let totalPrice = (basePrice + selectedSizePrice + selectedOptionsPrice) * currentQuantity;
+                $('#v_total_price').text("{{ config('settings.site_currency_icon') }}" + totalPrice);
+            }
+
+            $('.v_submit_button').on('click', function(e){
+                e.preventDefault();
+                $("#v_add_to_cart_form").submit();
+            });
+            $("#v_add_to_cart_form").on('submit', function(e) {
+                e.preventDefault();
+                // validation
+                let selectedSize = $(".v_product_size");
+                if (selectedSize.length > 0) {
+                    if ($(".v_product_size:checked").val() === undefined) {
+                        toastr.error('Please select a size');
+                        console.error('Please select a size');
+                        return;
+                    }
+                }
+
+                let formData = $(this).serialize();
+                // console.log(formData);
+                $.ajax({
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
+                    },
+                    url: '{{ route("add-to-cart") }}',
+                    data: formData,
+                    beforeSend: function() {
+                        $('.modal_cart_button').attr('disabled', true);
+                        $('.modal_cart_button').html(
+                            '<span class="spinner-border text-light spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
+                            );
+                    },
+                    success: function(response) {
+                        toastr.success(response.message);
+                        $('#cartModal').modal('hide');
+                        updateSidebarCart();
+                    },
+                    error: function(xhr, status, error) {
+                        let errorMessage = xhr.responseJSON.message;
+                        toastr.error(errorMessage);
+                    },
+                    complete: function() {
+                        $('.modal_cart_button').attr('disabled', false);
+                        $('.modal_cart_button').html('Add To Cart');
+                    }
+                })
+            });
+
+        }); // end of document ready
+    </script>
+@endpush
