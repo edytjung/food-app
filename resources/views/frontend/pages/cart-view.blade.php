@@ -56,10 +56,10 @@
                                         </th>
 
                                         <th class="fp__pro_icon">
-                                            <a class="clear_all" href="#">clear all</a>
+                                            <a class="clear_all" href="{{ route('cart.destroy') }}">clear all</a>
                                         </th>
                                     </tr>
-                                    @foreach (Cart::content() as $product)
+                                    @forelse (Cart::content() as $product)
                                         <tr>
                                             <td class="fp__pro_img"><img
                                                     src="{{ asset($product->options->product_info['image']) }}"
@@ -96,16 +96,20 @@
                                             </td>
 
                                             <td class="fp__pro_tk">
-                                                <h6>
-                                                    {{ currencyPosition($product->price * $product->qty) }}
+                                                <h6 class="product_cart_total">
+                                                    {{ currencyPosition(productTotal($product->rowId)) }}
                                                 </h6>
                                             </td>
 
                                             <td class="fp__pro_icon">
-                                                <a href="#" onclick="removeProductFromSidebar('{{ $product->rowId }}')"><i class="far fa-times" aria-hidden="true"></i></a>
+                                                <a class="remove_cart_product" href="#" data-id="{{ $product->rowId }}"><i class="far fa-times" aria-hidden="true"></i></a>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="fp__pro_name" style="width: 100%">Cart is Empty</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -142,8 +146,16 @@
             let currentValue = parseInt(inputField.val());
             inputField.val(++currentValue);
 
+
+
             let rowId = inputField.data("id");
-            cartQtyUpdate(rowId, currentValue);
+            cartQtyUpdate(rowId, currentValue, function(response){
+                let productTotal = response.product_total;
+                inputField.closest("tr")
+                    .find(".product_cart_total")
+                    .text("{{ currencyPosition(":productTotal") }}"
+                    .replace(":productTotal", productTotal));
+            });
         });
 
         $('.decrement').on('click', function(){
@@ -153,11 +165,17 @@
                 inputField.val(--currentValue);
 
                 let rowId = inputField.data("id");
-                cartQtyUpdate(rowId, currentValue);
+                cartQtyUpdate(rowId, currentValue, function(response){
+                    let productTotal = response.product_total;
+                    inputField.closest("tr")
+                        .find(".product_cart_total")
+                        .text("{{ currencyPosition(":productTotal") }}"
+                        .replace(":productTotal", productTotal));
+                });
             }
         });
 
-        function cartQtyUpdate(rowId, qty){
+        function cartQtyUpdate(rowId, qty, callback){
             $.ajax({
                 method: 'POST',
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')},
@@ -167,16 +185,54 @@
                     'qty' : qty
                 },
                 beforeSend: function(){
-
+                    loaderShow();
                 },
                 success: function(response){
-
+                    if(callback && typeof callback === 'function'){
+                        callback(response);
+                        updateSidebarCart();
+                    }
                 },
                 error: function(xhr, status, error){
-
+                    let errorMessage = xhr.responseJSON.message;
+                    loaderHide();
+                    toastr.error(errorMessage);
                 },
                 complete: function(){
+                    loaderHide();
+                }
+            })
+        }
 
+        $('.remove_cart_product').on('click', function(e){
+            e.preventDefault();
+            let rowId = $(this).data("id");
+            removeCartProduct(rowId);
+            $(this).closest('tr').remove();
+        })
+
+        function removeCartProduct(rowId){
+            $.ajax({
+                method: 'GET',
+                url: '{{ route("cart-product-remove", ":rowId") }}'.replace(':rowId', rowId),
+                beforeSend: function(){
+                    loaderShow();
+                },
+                success: function(response){
+                    if(response.status === 'success'){
+                        updateSidebarCart(function(){
+                            toastr.success(response.message);
+                            loaderHide();
+                        });
+                    }
+                },
+                error: function(xhr, status, error){
+                    let errorMessage = xhr.responseJSON.message;
+                    loaderHide();
+                    toastr.error(errorMessage);
+                },
+                complete: function(){
+                    loaderHide();
                 }
             })
         }

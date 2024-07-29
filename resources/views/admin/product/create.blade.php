@@ -53,6 +53,10 @@
                         <input type="text" name="offer_price" class="form-control" value="{{ old('offer_price') }}">
                     </div>
                     <div class="form-group">
+                        <label>Quantity</label>
+                        <input type="text" name="quantity" class="form-control" value="{{ old('quantity') }}">
+                    </div>
+                    <div class="form-group">
                         <label>SKU</label>
                         <input type="text" name="sku" class="form-control" value="{{ old('sku') }}">
                     </div>
